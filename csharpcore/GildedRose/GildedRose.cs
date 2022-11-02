@@ -1,87 +1,87 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GildedRoseKata
 {
     public class GildedRose
     {
         IList<Item> Items;
+        private const string SULFURAS = "Sulfuras";
+        private const int SULFURAS_QUALITY = 80;
+        private const string AGED_BRIE = "Aged Brie";
+        private const string BACKSTAGE_PASSES = "Backstage passes";
+        private const int MAX_QUALITY = 50;
+        private const int MIN_QUALITY = 0;
         public GildedRose(IList<Item> Items)
         {
             this.Items = Items;
         }
 
+        private int CheckQuality(int quality)
+        {
+            if (quality > MAX_QUALITY)
+            {
+                return MAX_QUALITY;
+            }
+
+            if (quality < MIN_QUALITY)
+            {
+                return MIN_QUALITY;
+            }
+
+            return quality;
+        }
+
+        private int GetItemQuality(Item item)
+        {
+            if (item.Name.StartsWith(SULFURAS, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return SULFURAS_QUALITY;
+            }
+
+            if (item.Name.Equals(AGED_BRIE, StringComparison.CurrentCultureIgnoreCase))
+            {
+                if (item.SellIn <= 0)
+                {
+                    return CheckQuality(item.Quality + 2);
+                }
+                return CheckQuality(item.Quality + 1);
+            }
+
+            if (item.Name.StartsWith(BACKSTAGE_PASSES, StringComparison.CurrentCultureIgnoreCase))
+            {
+                if (item.SellIn > 10)
+                {
+                    return CheckQuality(item.Quality + 1);
+                }
+                if (item.SellIn > 5)
+                {
+                    return CheckQuality(item.Quality + 2);
+                }
+                if (item.SellIn > 0)
+                {
+                    return CheckQuality(item.Quality + 3);
+                }
+                return 0;
+            }
+
+            if (item.SellIn > 0)
+            {
+                return CheckQuality(item.Quality - 1);
+            }
+
+            return CheckQuality(item.Quality - 2);
+        }
+
         public void UpdateQuality()
         {
-            for (var i = 0; i < Items.Count; i++)
+            foreach (var item in Items)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
+                item.Quality = GetItemQuality(item);
+                
+                if (!item.Name.StartsWith(SULFURAS, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            Items[i].Quality = Items[i].Quality - 1;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (Items[i].Quality < 50)
-                        {
-                            Items[i].Quality = Items[i].Quality + 1;
-                        }
-                    }
+                    item.SellIn--;
                 }
             }
         }
