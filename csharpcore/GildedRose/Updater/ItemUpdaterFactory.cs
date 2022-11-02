@@ -12,11 +12,6 @@ namespace GildedRoseKata.Updater
 
         public static AbstractItemUpdater GetUpdater(string itemName)
         {
-            if (_agingItemNames.Contains(itemName, StringComparer.CurrentCultureIgnoreCase))
-            {
-                return new AgingItemUpdater();
-            }
-
             if (_legendaryItemNamesStartWith.Any(name => itemName.StartsWith(name, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return new LegendaryItemUpdater();
@@ -32,7 +27,7 @@ namespace GildedRoseKata.Updater
                 return new ConjuredItemUpdater();
             }
 
-            return new BasicItemUpdater();
+            return new BasicItemUpdater(_agingItemNames.Contains(itemName, StringComparer.CurrentCultureIgnoreCase));
         }
     }
 }

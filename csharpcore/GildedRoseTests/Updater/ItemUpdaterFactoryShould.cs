@@ -8,7 +8,7 @@ namespace GildedRoseTests.Updater
     public class ItemUpdaterFactoryShould
     {
         [Theory]
-        [InlineData("Aged Brie", typeof(AgingItemUpdater))]
+        [InlineData("Aged Brie", typeof(BasicItemUpdater))]
         [InlineData("Test item", typeof(BasicItemUpdater))]
         [InlineData("Conjured Maul of the Rat King", typeof(ConjuredItemUpdater))]
         [InlineData("Sulfuras, Hand of Ragnaros", typeof(LegendaryItemUpdater))]

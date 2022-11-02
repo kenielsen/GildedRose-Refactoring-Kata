@@ -5,13 +5,13 @@ using Xunit;
 
 namespace GildedRoseTests.Updater
 {
-    public class BasicItemUpdaterShould
+    public class DecreasingBasicItemUpdaterShould
     {
-        private readonly BasicItemUpdater _updater;
+        protected readonly BasicItemUpdater _updater;
 
-        public BasicItemUpdaterShould()
+        public DecreasingBasicItemUpdaterShould()
         {
-            _updater = new BasicItemUpdater();
+            _updater = new BasicItemUpdater(false);
         }
 
         [Fact]
