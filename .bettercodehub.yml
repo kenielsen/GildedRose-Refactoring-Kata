@@ -1,17 +1,5 @@
 exclude:
-- /js/lib/.*
-component_depth: 1
+  - /js/lib/.*
+component_depth: 4
 languages:
-- cpp
-- csharp
-- go
-- groovy
-- java
-- javascript
-- perl
-- php
-- python
-- ruby
-- scala
-- script
-- swift
+  - csharp
